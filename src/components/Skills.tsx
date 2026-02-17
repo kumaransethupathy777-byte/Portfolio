@@ -9,7 +9,7 @@ interface Skill {
 
 interface SkillCategory {
   title: string;
-  icon: JSX.Element;
+  icon: React.ReactElement;
   skills: Skill[];
 }
 
