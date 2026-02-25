@@ -35,7 +35,7 @@ const Projects: React.FC = () => {
             <div key={index} className="project-card">
               <div className="project-image">
                 <div className="project-overlay">
-                  <a href="#" className="project-link">View Project</a>
+                  <a href="#" target="_blank" rel="noopener noreferrer" className="project-link">View Project</a>
                 </div>
               </div>
               <div className="project-content">
