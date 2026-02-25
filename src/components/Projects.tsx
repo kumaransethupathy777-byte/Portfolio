@@ -10,19 +10,29 @@ interface Project {
 const Projects: React.FC = () => {
   const projects: Project[] = [
     {
-      title: 'E-Commerce Platform',
-      description: 'A full-stack e-commerce solution built with React.js and Nest.js, featuring real-time inventory management and secure payment processing.',
-      technologies: ['React.js', 'Nest.js', 'PostgreSQL']
+      title: 'Sales 360',
+      description: 'Comprehensive sales management platform features real-time analytics, lead tracking, and performance metrics.',
+      technologies: ['React.js', 'Go', 'PostgreSQL', 'Redis']
     },
     {
-      title: 'Task Management API',
-      description: 'High-performance RESTful API built with Go, handling thousands of concurrent requests with efficient data processing and caching.',
-      technologies: ['Go', 'Redis', 'MongoDB']
+      title: 'Skillzen',
+      description: 'Educational technology platform streamlining learner management and course delivery with intuitive dashboards.',
+      technologies: ['React.js', 'Nest.js', 'MongoDB', 'TypeScript']
     },
     {
-      title: 'Real-Time Chat Application',
-      description: 'Modern chat application with WebSocket support, built using React.js frontend and Nest.js backend with real-time message delivery.',
-      technologies: ['React.js', 'Nest.js', 'WebSocket']
+      title: 'Indian Oil Project',
+      description: 'Frontend development for a large-scale enterprise application, focusing on high-volume data visualization and reliability.',
+      technologies: ['React.js', 'Material UI', 'State Management']
+    },
+    {
+      title: 'DMS (Document Management System)',
+      description: 'Secure enterprise document management solution with robust search, versioning, and access control.',
+      technologies: ['React.js', 'Redux', 'RESTful API']
+    },
+    {
+      title: 'Auth Project',
+      description: 'Centralized authentication and authorization service implementing secure SSO and role-based access control.',
+      technologies: ['Angular', 'TypeScript', 'OAuth 2.0']
     }
   ];
 
