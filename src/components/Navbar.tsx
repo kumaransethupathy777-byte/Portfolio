@@ -32,12 +32,13 @@ const Navbar: React.FC = () => {
         
         <div className="nav-right">
           <ul className={`nav-menu ${isMobileMenuOpen ? 'active' : ''}`}>
-            <li><a onClick={() => scrollToSection('home')} className="nav-link">Home</a></li>
-            <li><a onClick={() => scrollToSection('about')} className="nav-link">About</a></li>
-            <li><a onClick={() => scrollToSection('skills')} className="nav-link">Skills</a></li>
-            <li><a onClick={() => scrollToSection('projects')} className="nav-link">Projects</a></li>
-            <li><a onClick={() => scrollToSection('contact')} className="nav-link">Contact</a></li>
+            <li><a href="#home" onClick={(e) => { e.preventDefault(); scrollToSection('home'); }} className="nav-link">Home</a></li>
+            <li><a href="#about" onClick={(e) => { e.preventDefault(); scrollToSection('about'); }} className="nav-link">About</a></li>
+            <li><a href="#skills" onClick={(e) => { e.preventDefault(); scrollToSection('skills'); }} className="nav-link">Skills</a></li>
+            <li><a href="#projects" onClick={(e) => { e.preventDefault(); scrollToSection('projects'); }} className="nav-link">Projects</a></li>
+            <li><a href="#contact" onClick={(e) => { e.preventDefault(); scrollToSection('contact'); }} className="nav-link">Contact</a></li>
           </ul>
+
 
           <div className="nav-actions">
             <ThemeToggle />
