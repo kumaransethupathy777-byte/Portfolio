@@ -1,89 +1,88 @@
 import { render } from '../src/entry-server';
 
+interface PagesFunction {
+  (context: any): Promise<Response> | Response;
+}
+
 const BOT_AGENTS = [
-  'googlebot',
-  'bingbot',
-  'yandexbot',
-  'baiduspider',
-  'facebookexternalhit',
-  'twitterbot',
-  'rogerbot',
-  'linkedinbot',
-  'embedly',
-  'quora link preview',
-  'showyoubot',
-  'outbrain',
-  'pinterest/0.',
-  'developers.google.com/+/web/snippet',
-  'slackbot',
-  'vkshare',
-  'w3c_validator',
-  'redditbot',
-  'applebot',
-  'whatsapp',
-  'flipboard',
-  'tumblr',
-  'bitlybot',
-  'skypeuripreview',
-  'nuzzel',
-  'discordbot',
-  'google pageadviser',
-  'qwantify',
-  'pinterestbot',
-  'bitrix link preview',
-  'xing-content-uiviewer',
-  'chrome-lighthouse',
-  'telegrambot',
-  'google-inspectiontool'
+  /googlebot/i,
+  /bingbot/i,
+  /yandexbot/i,
+  /baiduspider/i,
+  /facebookexternalhit/i,
+  /twitterbot/i,
+  /rogerbot/i,
+  /linkedinbot/i,
+  /embedly/i,
+  /quora link preview/i,
+  /showyoubot/i,
+  /outbrain/i,
+  /pinterest/i,
+  /slackbot/i,
+  /vkshare/i,
+  /w3c_validator/i,
+  /redditbot/i,
+  /applebot/i,
+  /whatsapp/i,
+  /flipboard/i,
+  /tumblr/i,
+  /bitlybot/i,
+  /skypeuripreview/i,
+  /nuzzel/i,
+  /discordbot/i,
+  /qwantify/i,
+  /bitrix link preview/i,
+  /xing-content-uiviewer/i,
+  /telegrambot/i,
+  /google-inspectiontool/i
 ];
 
 export const onRequest: PagesFunction = async (context) => {
   const url = new URL(context.request.url);
-  const userAgent = context.request.headers.get('user-agent')?.toLowerCase() || '';
+  const userAgent = context.request.headers.get('user-agent') || '';
 
-  // Only intercept HTML requests
-  const isHtml = context.request.headers.get('accept')?.includes('text/html') || url.pathname.endsWith('.html') || !url.pathname.includes('.');
+  // Only intercept HTML requests for the root or pages
+  const isHtml = context.request.headers.get('accept')?.includes('text/html') || 
+                 url.pathname.endsWith('.html') || 
+                 !url.pathname.includes('.');
   
-  if (!isHtml) {
-    return context.next();
-  }
+  const isBot = BOT_AGENTS.some(regex => regex.test(userAgent));
 
-  const isBot = BOT_AGENTS.some(bot => userAgent.includes(bot));
-
-  if (isBot) {
-    console.log(`Bot detected: ${userAgent}. Performing SSR.`);
-    
-    // Get the original response (index.html)
+  if (isBot && isHtml) {
     const response = await context.next();
     const template = await response.text();
     
     try {
-      // Render the app to string
       const appHtml = render();
       
-      // Inject the rendered app into the template
-      // We look for the root div and inject the content
+      // Use regex to find the root div, handling potential whitespace/attributes
       const ssrHtml = template.replace(
-        '<div id="root"></div>',
-        `<div id="root">${appHtml}</div>`
+        /(<div\s+id="root"[^>]*>)\s*(<\/div>)/i,
+        `$1${appHtml}$2`
       );
       
       return new Response(ssrHtml, {
         headers: {
+          ...Object.fromEntries(response.headers),
           'content-type': 'text/html;charset=UTF-8',
+          'X-Render-Mode': 'SSR',
+          'X-Bot-Detected': 'true'
         },
       });
     } catch (error) {
-      console.error('SSR Rendering error:', error);
-      // Fallback to original response if SSR fails
+      console.error('SSR error:', error);
       return new Response(template, {
         headers: {
-          'content-type': 'text/html;charset=UTF-8',
-        },
+          ...Object.fromEntries(response.headers),
+          'X-Render-Mode': 'SSR-Fallback',
+          'X-SSR-Error': String(error)
+        }
       });
     }
   }
 
-  // Not a bot, proceed as usual (CSR)
-  return context.next();
+  const response = await context.next();
+  const modifiedResponse = new Response(response.body, response);
+  modifiedResponse.headers.set('X-Render-Mode', 'CSR');
+  return modifiedResponse;
 };
