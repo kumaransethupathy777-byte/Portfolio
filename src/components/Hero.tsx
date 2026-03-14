@@ -1,28 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './Hero.css';
 
 const Hero: React.FC = () => {
-  const [isLocked, setIsLocked] = useState(true);
-
   return (
-    <section id="home" className={`hero ${isLocked ? 'locked' : 'unlocked'}`}>
-      {isLocked && (
-        <div className="lock-overlay">
-          <div className="lock-container">
-            <svg className="lock-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path className="lock-body" d="M19 11H5C3.89543 11 3 11.8954 3 13V20C3 21.1046 3.89543 22 5 22H19C20.1046 22 21 21.1046 21 20V13C21 11.8954 20.1046 11 19 11Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              <path className="lock-shackle" d="M7 11V7C7 5.67392 7.52678 4.40215 8.46447 3.46447C9.40215 2.52678 10.6739 2 12 2C13.3261 2 14.5979 2.52678 15.5355 3.46447C16.4732 4.40215 17 5.67392 17 7V11" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M12 18V15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              <circle cx="12" cy="16.5" r="1.5" stroke="currentColor" strokeWidth="2"/>
-            </svg>
-            <button className="unlock-btn" onClick={() => setIsLocked(false)}>
-              Unlock Portfolio
-            </button>
-            <p className="lock-hint">Welcome Agent. Secure Access Required.</p>
-          </div>
-        </div>
-      )}
-      
+    <section id="home" className="hero">
       <div className="hero-background">
         <div className="gradient-orb orb-1"></div>
         <div className="gradient-orb orb-2"></div>
