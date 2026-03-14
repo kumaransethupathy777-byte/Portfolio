@@ -1,4 +1,5 @@
-import { render } from '../src/entry-server';
+// @ts-ignore
+import { render } from '../dist-ssr/entry-server.js';
 
 interface PagesFunction {
   (context: any): Promise<Response> | Response;
